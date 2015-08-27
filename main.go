@@ -57,7 +57,7 @@ func init() {
 func blobSumLayer(r *tar.Reader) (string, error) {
 	sha := sha256.New()
 	gw := gzip.NewWriter(sha)
-	if n, err := io.Copy(gw, r); err != nil {
+	if _, err := io.Copy(gw, r); err != nil {
 		return "", err
 	}
 	gw.Close()
