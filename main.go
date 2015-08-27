@@ -161,7 +161,6 @@ func outputManifestFor(target string) {
 		}
 
 		if strings.HasSuffix(hdr.Name, "layer.tar") {
-			fmt.Printf("Layer size: %d\n", hdr.Size)
 			id := getLayerPrefix(hdr.Name)
 			sum, _ := blobSumLayer(t)
 			if _, ok := layers[id]; !ok {
