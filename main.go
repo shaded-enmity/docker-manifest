@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	verbose, help bool
-	target, key   string
+	verbose, help, print_digest bool
+	target, key                 string
 )
 
 type Layer struct {
@@ -36,6 +36,7 @@ type LayerMap map[string]*Layer
 func init() {
 	flag.Bool([]string{"h", "-help"}, false, "Display help")
 	flag.BoolVar(&verbose, []string{"v", "-verbose"}, false, "Switch to verbose output")
+	flag.BoolVar(&print_digest, []string{"d", "-digest"}, false, "Print also digest of manifest")
 	flag.StringVar(&key, []string{"k", "-key-file"}, "", "Private key with which to sign")
 	flag.Parse()
 }
@@ -221,6 +222,12 @@ func outputManifestFor(target string) {
 	} else {
 		x, err = json.MarshalIndent(m, "", "   ")
 	}
+
+	if print_digest {
+		dgstr, _ := digest.FromBytes(x)
+		fmt.Println(string(dgstr))
+	}
+
 	fmt.Println(string(x))
 }
 
