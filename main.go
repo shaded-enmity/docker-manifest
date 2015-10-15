@@ -213,8 +213,14 @@ func outputManifestFor(target string) {
 		m.History = append(m.History, manifest.History{V1Compatibility: l.Data})
 	}
 
-	sm, err := manifest.Sign(&m, pkey)
-	x, _ := sm.MarshalJSON()
+	var x []byte
+	if pkey != nil {
+		var sm *manifest.SignedManifest
+		sm, err = manifest.Sign(&m, pkey)
+		x, err = sm.MarshalJSON()
+	} else {
+		x, err = json.MarshalIndent(m, "", "   ")
+	}
 	fmt.Println(string(x))
 }
 
